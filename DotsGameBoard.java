@@ -1,0 +1,375 @@
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Graphics2D;
+import javax.swing.JPanel;
+
+public class DotsGameBoard extends JPanel {
+	public DotsGameBoard() {
+	}
+	
+	int dotSize = 6;
+	int d2 = dotSize/2;
+	int boxSize = 50;
+	int gridSize;
+	int canvasSize = 400;
+	int reps = 0;
+	Point currentMousePos;
+	String playerA ="A";
+	String playerB ="B";
+	int playerAScore =0;
+	int playerBScore = 0;
+	int whoTurn =1;
+
+	private Box[][] boxes;
+	
+	public void setTurn(int turn) {
+		whoTurn = turn;
+	}
+	public void setPlayers(String a, String b) {
+		playerA =a;
+		playerB =b;
+	}
+	
+	public void switchPlayers() {
+		if (whoTurn ==1) {
+			whoTurn = 2;
+		}else {
+			whoTurn =1;
+		}
+	}
+	
+	
+	
+	public int boardClicked(int x, int y) { // returns -1 if no lines were drawn. 0 if line drawn, 1 if boxes were completed.
+		 int boxX = x / boxSize;
+         int boxY = y / boxSize;
+         int initScoreA = playerAScore;
+         int initScoreB = playerBScore;
+         char side;
+         
+         if (boxX > gridSize-1 ) { // edge case user clicks slightly past last box
+        	 boxX -=1;
+        	 side ='R';
+         }
+         else if (boxY > gridSize-1) { // edge case mouse slighty beyond bottom box
+        	 boxY -=1;
+        	 side = 'B';
+        	 
+         }
+         else {
+        	 side = whichSide(x, y);
+         }
+         
+         if (side == 'x') { // the click was right in the middle of a box
+        	 return -1;
+         }
+         
+         int result = addLine(side, boxX, boxY); 
+         
+         if (result == 0) {
+        	 
+        	 return -1;
+         }
+         if (initScoreA != playerAScore || initScoreB != playerBScore) {
+        	 return 1;
+         }
+         
+         
+         
+         return 0;        
+		
+	}
+	
+	public void clearScores() {
+		playerAScore = 0;
+		playerBScore = 0;
+	}
+	
+	public boolean isBoardFull() {
+		for (int k = 0; k<gridSize; k++) {
+        	for (int l =0; l < gridSize; l++) {
+        		if(boxes[k][l].complete < 1) {
+        			return false;
+        		}
+        		
+        	}
+		}
+		return true;
+	}
+	
+	public int addLine(char side, int boxX, int boxY) { //returns 1 if a line was drawn 0 if not
+		int drawn =0; //if a line was drawn set to 1;
+		
+		
+		if (side == 'T' && boxes[boxX][boxY].top ==0) { //top
+        	boxes[boxX][boxY].top = whoTurn;
+        	
+        	if (boxY > 0 && boxes[boxX][boxY-1].bottom <1) { // check that its not already filled in
+        		addLine('B', boxX, boxY-1);
+        	}
+        	drawn = 1;
+        	
+        	
+        }else if (side == 'B' &&boxes[boxX][boxY].bottom ==0) {
+        	boxes[boxX][boxY].bottom = whoTurn;
+        	if (boxY != gridSize-1 && boxes[boxX][boxY+1].top <1) { // check that its not already filled in
+        		addLine('T', boxX, boxY+1);
+        	}
+        	drawn = 1;
+        	
+        }else if (side == 'L' &&boxes[boxX][boxY].left ==0) {
+        	boxes[boxX][boxY].left = whoTurn;
+        	if (boxX != 0 && boxes[boxX-1][boxY].right <1) { // check that its not already filled in
+        		addLine('R', boxX-1, boxY);
+        	}
+        	drawn = 1;
+        }else if (side == 'R' && boxes[boxX][boxY].right ==0) {
+        	boxes[boxX][boxY].right = whoTurn;
+        	if (boxX != gridSize-1 && boxes[boxX+1][boxY].left <1) { // check that its not already filled in
+        		addLine('L', boxX+1, boxY);
+        	}
+        	drawn = 1;
+        }
+		
+		if (drawn == 1) {
+			if (isBoxComplete(boxX, boxY) == 1) {
+        		boxes[boxX][boxY].complete = whoTurn;
+        		
+        		
+        		if (whoTurn == 1) { //increment players score if a box was finished.
+        			playerAScore+=1;
+        		}else {
+        			playerBScore +=1;
+        		}
+        	}
+			
+			
+		}
+		
+		
+		return drawn;
+	}
+	
+	public int isBoxComplete(int x, int y) {
+		if (boxes[x][y].top > 0 && boxes[x][y].bottom > 0 && boxes[x][y].left > 0 && boxes[x][y].right > 0 ) {
+			return 1;
+		}
+		return 0;
+	}
+	
+	public char whichSide(int mouseX, int mouseY) {
+		
+		
+		int x = mouseX / boxSize;
+        int y = mouseY / boxSize;
+        
+        //these are the coords of each edge of current box
+        int top = y*boxSize +d2;
+        int left = x*boxSize +d2;
+        int bottom = (y+1)*boxSize +d2;
+        int right = (x +1)*boxSize +d2;
+        
+        //these are the distances from the mouse position to each edge
+        int disT = mouseY - top;
+        int disB = bottom - mouseY;
+        int disL = mouseX - left;
+        int disR = right - mouseX;
+        
+        //4 if statments that determine which edge is closest to the mouse and draw that edge.
+        if (disT <disB && disT<disL && disT < disR) {
+        	return 'T';
+        }else if (disB < disT && disB < disL && disB < disR) {
+        	return 'B';
+        }else if (disL < disT && disL < disB && disL < disR) {
+        	return 'L';
+        }else if (disR < disT && disR< disB && disR < disL) {
+        	return 'R';
+        }
+        return 'x';
+		
+		
+	}
+	
+	
+	
+	public void savePoint(Point x) {
+		
+		
+		currentMousePos = x; //saves last position.
+	}
+	
+	// change this probably since we will make a box class.
+	public void saveBoardSize(int gridSize) {
+		boxSize = canvasSize/gridSize;
+		this.gridSize = gridSize;
+		
+		boxes = new Box[gridSize][gridSize];
+		for (int i = 0; i < gridSize; i++) {
+		    for (int j = 0; j < gridSize; j++) {
+		        boxes[i][j] = new Box();
+
+		        
+		    }
+		}
+		
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	protected void paintComponent(Graphics g) {
+		
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        
+        if (whoTurn ==1) {
+        	g.setColor(new Color(141, 48, 255));
+        }else {
+        	g.setColor(new Color(83, 255, 43));
+        }
+        
+		
+		
+		if (currentMousePos != null) {
+			//x and y help locate the box we are currently in
+            int x = currentMousePos.x / boxSize;
+            int y = currentMousePos.y / boxSize;
+            
+            //these are the coords of each edge of current box
+            int top = y*boxSize +d2;
+            int left = x*boxSize +d2;
+            int bottom = (y+1)*boxSize +d2;
+            int right = (x +1)*boxSize +d2;
+            
+            
+        
+            char side = whichSide(currentMousePos.x, currentMousePos.y);
+            
+            //4 if statments that determine which edge is closest to the mouse and draw that edge.
+            if (side == 'T') {
+            	g.drawLine(left, top, right, top);
+            }else if (side == 'B') {
+            	g.drawLine(left, bottom, right, bottom);
+            }else if (side == 'L') {
+            	g.drawLine(left, top, left, bottom);
+            }else if (side == 'R') {
+            	g.drawLine(right, top, right, bottom);
+            }
+            
+        
+            
+            
+           
+        }
+		 	g.setColor(Color.BLACK);
+	        for (int i = 0; i <= canvasSize/boxSize; i++) { // draw the dots.
+	            for (int j = 0; j <= canvasSize/boxSize; j++) {
+	                int x = i * boxSize ;
+	                int y = j * boxSize ;
+	                
+	                
+	                g.fillOval(x, y, dotSize, dotSize);
+	         
+	            }
+	        }
+	        g2d.setStroke(new BasicStroke(3));
+	        g2d.setFont(new Font("Arial", Font.BOLD, 36));
+	        for (int k = 0; k<gridSize; k++) {
+	        	for (int l =0; l < gridSize; l++) {
+	        		// draw initial if complete
+	        		if (boxes[k][l].complete >0) {
+	        			
+	        			if (boxes[k][l].complete == 1) {
+	        				
+	        				g2d.setColor(new Color(64, 0, 128));
+	        				g2d.drawString(playerA, k*boxSize -9 +boxSize/2 , l*boxSize +15 + boxSize/2);
+	        			}else {	        				
+	        				g2d.setColor(new Color(0, 64, 0));
+	        				g2d.drawString(playerB,  k*boxSize -9 +boxSize/2 , l*boxSize +15 + boxSize/2);
+	        			}
+	        			
+	        			
+	        			
+	        			
+	        			g2d.drawLine(k*boxSize+d2, l*boxSize+d2, k*boxSize+d2, (l+1)*boxSize+d2);
+	        			
+	        			
+	        		}
+	        		
+	        		//draw left
+	        		if (boxes[k][l].left >0) {
+	        			if (boxes[k][l].left == 1) {
+	        				
+	        				g2d.setColor(new Color(64, 0, 128));	 
+	        			}else {	        				
+	        				g2d.setColor(new Color(0, 64, 0));	        				
+	        			}
+	        			g2d.drawLine(k*boxSize+d2, l*boxSize+d2, k*boxSize+d2, (l+1)*boxSize+d2);
+	        			
+	        			
+	        		}
+	        		//draw top
+	        		if (boxes[k][l].top >0) {
+	        			if (boxes[k][l].top == 1) {
+	        				
+	        				g2d.setColor(new Color(64, 0, 128));	 
+	        			}else {	        				
+	        				g2d.setColor(new Color(0, 64, 0));	        				
+	        			}
+	        			g2d.drawLine(k*boxSize+d2, l*boxSize+d2, (k+1)*boxSize+d2, l*boxSize+d2);
+	        			
+	        			
+	        		}
+	        		
+	        		//edge case far right
+	        		if (k== gridSize-1) {
+	        			if (boxes[k][l].right >0) {
+		        			if (boxes[k][l].right == 1) {
+		        				
+		        				g2d.setColor(new Color(64, 0, 128));	 
+		        			}else {	        				
+		        				g2d.setColor(new Color(0, 64, 0));	        				
+		        			}
+		        			g2d.drawLine((k+1)*boxSize+d2, l*boxSize+d2, (k+1)*boxSize+d2, (l+1)*boxSize+d2);
+		        			
+		        			
+		        		}
+	        		}
+	        		//edge case bottom row
+	        		if (l== gridSize-1) {
+	        			if (boxes[k][l].bottom >0) {
+		        			if (boxes[k][l].bottom == 1) {
+		        				
+		        				g2d.setColor(new Color(64, 0, 128));	 
+		        			}else {	        				
+		        				g2d.setColor(new Color(0, 64, 0));	        				
+		        			}
+		        			g2d.drawLine(k*boxSize+d2, (l+1)*boxSize+d2, (k+1)*boxSize+d2, (l+1)*boxSize+d2);
+		        			
+		        			
+		        		}
+	        		}
+	        		
+	        		
+	        	}
+	        }
+	        
+	       
+	      
+        
+        
+	}
+	
+	
+	
+	
+	
+
+}
