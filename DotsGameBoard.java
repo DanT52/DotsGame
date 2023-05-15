@@ -10,30 +10,28 @@ public class DotsGameBoard extends JPanel {
 	public DotsGameBoard() {
 	}
 	
-	int dotSize = 6;
-	int d2 = dotSize/2;
+	//store needed values for the game.
+	int dotSize = 6; //the size of dots does not change.
+	int d2 = dotSize/2; //this is half the dot size
 	int boxSize = 50;
-	int gridSize;
-	int canvasSize = 400;
-	int reps = 0;
+	int gridSize; 
+	int canvasSize = 400; //the canvas size does not change
 	Point currentMousePos;
 	String playerA ="A";
 	String playerB ="B";
 	int playerAScore =0;
 	int playerBScore = 0;
-	int whoTurn =1;
+	int whoTurn =1; // 1 means player a turn 2 is player b turn.
 
-	private Box[][] boxes;
+	private Box[][] boxes; //array of boxes for the game.
 	
-	public void setTurn(int turn) {
-		whoTurn = turn;
-	}
-	public void setPlayers(String a, String b) {
+
+	public void setPlayers(String a, String b) { // set the player initials
 		playerA =a;
 		playerB =b;
 	}
 	
-	public void switchPlayers() {
+	public void switchPlayers() { //switch players
 		if (whoTurn ==1) {
 			whoTurn = 2;
 		}else {
@@ -44,8 +42,12 @@ public class DotsGameBoard extends JPanel {
 	
 	
 	public int boardClicked(int x, int y) { // returns -1 if no lines were drawn. 0 if line drawn, 1 if boxes were completed.
-		 int boxX = x / boxSize;
+		
+		//get the xy cords of the box the user clicked within.
+		 int boxX = x / boxSize; 
          int boxY = y / boxSize;
+         
+         //we store the scores here in a temp to be able to see if they changed meaning a box was completed.
          int initScoreA = playerAScore;
          int initScoreB = playerBScore;
          char side;
@@ -60,14 +62,15 @@ public class DotsGameBoard extends JPanel {
         	 
          }
          else {
-        	 side = whichSide(x, y);
+        	 side = whichSide(x, y); //which side will return the side we are closest too.
          }
          
          if (side == 'x') { // the click was right in the middle of a box
         	 return -1;
          }
          
-         int result = addLine(side, boxX, boxY); 
+         int result = addLine(side, boxX, boxY); // add line attempts to draw the line the user clicked 
+         										 // if the the line was not drawn 0 is returned.
          
          if (result == 0) {
         	 
@@ -100,7 +103,13 @@ public class DotsGameBoard extends JPanel {
 		return true;
 	}
 	
-	public int addLine(char side, int boxX, int boxY) { //returns 1 if a line was drawn 0 if not
+	
+	public int addLine(char side, int boxX, int boxY) { //returns 1 if a line was drawn. 0 if not drawn.
+														// if the line is drawn, the cooresponidng line in the box
+														//is set to 1 for player a, 2 for player b.
+		
+		//for each side we also check to make sure the adjacent box has the current line drawn in also.
+		
 		int drawn =0; //if a line was drawn set to 1;
 		
 		
@@ -135,8 +144,8 @@ public class DotsGameBoard extends JPanel {
         }
 		
 		if (drawn == 1) {
-			if (isBoxComplete(boxX, boxY) == 1) {
-        		boxes[boxX][boxY].complete = whoTurn;
+			if (isBoxComplete(boxX, boxY) == 1) { //here we check if the box was completed and increment the current players score if so.
+        		boxes[boxX][boxY].complete = whoTurn; //mark the box completed by the current player.
         		
         		
         		if (whoTurn == 1) { //increment players score if a box was finished.
@@ -153,14 +162,17 @@ public class DotsGameBoard extends JPanel {
 		return drawn;
 	}
 	
-	public int isBoxComplete(int x, int y) {
+	public int isBoxComplete(int x, int y) { //check if all sides of the box have a line drawn.
 		if (boxes[x][y].top > 0 && boxes[x][y].bottom > 0 && boxes[x][y].left > 0 && boxes[x][y].right > 0 ) {
 			return 1;
 		}
 		return 0;
 	}
 	
-	public char whichSide(int mouseX, int mouseY) {
+	
+	public char whichSide(int mouseX, int mouseY) { //calculates which side we of a box the mosue is closest too.
+													// returns 'T', 'B', 'L', 'R', respectivly.
+													//returns 'x' if the mouse is right in the middle.
 		
 		
 		int x = mouseX / boxSize;
@@ -195,18 +207,18 @@ public class DotsGameBoard extends JPanel {
 	
 	
 	
-	public void savePoint(Point x) {
+	public void savePoint(Point x) { // saves the last mouse position
 		
 		
-		currentMousePos = x; //saves last position.
+		currentMousePos = x; 
 	}
 	
-	// change this probably since we will make a box class.
+	// used to initialize the board size. 
 	public void saveBoardSize(int gridSize) {
 		boxSize = canvasSize/gridSize;
 		this.gridSize = gridSize;
 		
-		boxes = new Box[gridSize][gridSize];
+		boxes = new Box[gridSize][gridSize]; //the array of boxes initialized.
 		for (int i = 0; i < gridSize; i++) {
 		    for (int j = 0; j < gridSize; j++) {
 		        boxes[i][j] = new Box();
@@ -223,10 +235,10 @@ public class DotsGameBoard extends JPanel {
 	
 	
 	
-	
+	// paint component.
 	protected void paintComponent(Graphics g) {
 		
-        super.paintComponent(g);
+        super.paintComponent(g); // select the color for the hover effect based on current player.
         Graphics2D g2d = (Graphics2D) g;
         
         if (whoTurn ==1) {
@@ -236,7 +248,7 @@ public class DotsGameBoard extends JPanel {
         }
         
 		
-		
+		// the following code is responsible for drawing the thin hover (preview) line.
 		if (currentMousePos != null) {
 			//x and y help locate the box we are currently in
             int x = currentMousePos.x / boxSize;
@@ -268,6 +280,7 @@ public class DotsGameBoard extends JPanel {
             
            
         }
+			// the following code draws the grid of dots according to the board size selected.
 		 	g.setColor(Color.BLACK);
 	        for (int i = 0; i <= canvasSize/boxSize; i++) { // draw the dots.
 	            for (int j = 0; j <= canvasSize/boxSize; j++) {
@@ -279,12 +292,16 @@ public class DotsGameBoard extends JPanel {
 	         
 	            }
 	        }
+	        
+	        // here we draw the completed lines as well as the Player initial in the completed boxes.
 	        g2d.setStroke(new BasicStroke(3));
 	        g2d.setFont(new Font("Arial", Font.BOLD, 36));
+	        
 	        for (int k = 0; k<gridSize; k++) {
-	        	for (int l =0; l < gridSize; l++) {
+	        	for (int l =0; l < gridSize; l++) { // nesteed for loop that visits each box.
 	        		// draw initial if complete
-	        		if (boxes[k][l].complete >0) {
+	        		if (boxes[k][l].complete >0) { // check if the box completed and who completed it.
+	        									   // draws in the cooresponding initial in the players color.
 	        			
 	        			if (boxes[k][l].complete == 1) {
 	        				
@@ -298,12 +315,12 @@ public class DotsGameBoard extends JPanel {
 	        			
 	        			
 	        			
-	        			g2d.drawLine(k*boxSize+d2, l*boxSize+d2, k*boxSize+d2, (l+1)*boxSize+d2);
+
 	        			
 	        			
 	        		}
 	        		
-	        		//draw left
+	        		//draw left line of box.
 	        		if (boxes[k][l].left >0) {
 	        			if (boxes[k][l].left == 1) {
 	        				
@@ -315,7 +332,7 @@ public class DotsGameBoard extends JPanel {
 	        			
 	        			
 	        		}
-	        		//draw top
+	        		//draw top line of box
 	        		if (boxes[k][l].top >0) {
 	        			if (boxes[k][l].top == 1) {
 	        				
@@ -328,7 +345,7 @@ public class DotsGameBoard extends JPanel {
 	        			
 	        		}
 	        		
-	        		//edge case far right
+	        		//draw right line of box but only if we are on the last column
 	        		if (k== gridSize-1) {
 	        			if (boxes[k][l].right >0) {
 		        			if (boxes[k][l].right == 1) {
@@ -342,7 +359,7 @@ public class DotsGameBoard extends JPanel {
 		        			
 		        		}
 	        		}
-	        		//edge case bottom row
+	        		//draw bottom line but only if we are on the last row
 	        		if (l== gridSize-1) {
 	        			if (boxes[k][l].bottom >0) {
 		        			if (boxes[k][l].bottom == 1) {

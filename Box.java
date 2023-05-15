@@ -1,5 +1,5 @@
 
-public class Box {
+public class Box { // box object, represents one box. each side and if complete.
 	int complete = 0;
 	int top =0;
 	int bottom =0;

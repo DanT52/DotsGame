@@ -60,15 +60,13 @@ public class Dots extends JFrame {
 	 */
 	public Dots() {
 		
-		
-		
-		
 
 		setResizable(false);
 		setBackground(SystemColor.activeCaptionBorder);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 704, 597);
-		contentPane = new JPanel(){
+		
+		contentPane = new JPanel(){ // main Jpanel add gradient.
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
@@ -81,50 +79,24 @@ public class Dots extends JFrame {
                 g2.fillRect(0, 0, getWidth(), getHeight());
             }
         };
+        
+        //add all of the swing components to the window (panel)
+        
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		
+				
 		DotsGameBoard gameBoard = new DotsGameBoard(); //create gameboard
 		
 		gameBoard.setBorder(new LineBorder(new Color(91, 111, 112), 1, true));
 		gameBoard.setBackground(new Color(182, 210, 212));
 		gameBoard.setBounds(132, 75, 406, 406);
 		
-		gameBoard.addMouseMotionListener(new MouseMotionAdapter() { //mouse motion listener for hover effect
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				int x = e.getX();
-				int y = e.getY();
-				
-				
-				
-				
-				
-				gameBoard.savePoint(new Point(x,y));
-				
-				
-				gameBoard.repaint();
-				
-			}
-		
-			
-		});
-		
-		
-		
-		
-		
-		
-		
 		//Grid Size Label
 		JLabel gridSizeL = new JLabel("Grid Size:"); 
 		gridSizeL.setFont(new Font("Arial", Font.PLAIN, 16));
 		gridSizeL.setBounds(104, 262, 91, 33);
 		contentPane.add(gridSizeL);
-		
-		
 		
 		//Slider to select Grid Size.
 		JSlider slider = new JSlider(1, 8, 8); 
@@ -143,12 +115,11 @@ public class Dots extends JFrame {
             public void stateChanged(ChangeEvent e) {
                 int value = slider.getValue();
                 boxesSizeText.setText(value + " x " + value + " boxes");
-                // You can update the UI or perform any other action based on the selected value here
+                
             }
         });
 		
-		
-		
+	
 		playerA = new JTextField();
 		playerA.setText("A Player");
 		playerA.setBounds(104, 203, 86, 20);
@@ -231,23 +202,28 @@ public class Dots extends JFrame {
 		
 		//contentPane.add(gameBoard);
 		
-		strtBTN.addMouseListener(new MouseAdapter() { // when the start button is pressed the start screen components are removed and game compoennts are added.
+		strtBTN.addMouseListener(new MouseAdapter() { // when the start button is pressed the start screen 
+													  //components are removed and game compoennts are added.
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
+				//displayer text for the player names.
 				nameA.setText(playerA.getText());
 				nameB.setText(playerB.getText());
-				gameBoard.setPlayers(playerA.getText().substring(0,1), playerB.getText().substring(0,1));
-				gameBoard.saveBoardSize(slider.getValue());
+				
+				//save the player initials to DotsGameBoard.
+				gameBoard.setPlayers(playerA.getText().substring(0,1), playerB.getText().substring(0,1)); 
+				gameBoard.saveBoardSize(slider.getValue()); //save grid size to the DotsGameBoard class.
 				scoreA.setText("0");
 				scoreB.setText("0");
 				
-				if (gameBoard.whoTurn ==1) {
+				if (gameBoard.whoTurn ==1) { // change the text to display current player turn.
 					labelAboveBoard.setText(playerA.getText()+"'s Turn");
 				}else {
 					labelAboveBoard.setText(playerB.getText()+"'s Turn");
 				}
 				
+				//remove start page components
 				contentPane.remove(gridSizeL);
 				contentPane.remove(slider);
 				contentPane.remove(boxesSizeText);
@@ -257,6 +233,8 @@ public class Dots extends JFrame {
 				contentPane.remove(pBL);
 				contentPane.remove(dnBL);
 				contentPane.remove(strtBTN);
+				
+				//and game page components.
 				contentPane.add(gameBoard);
 				contentPane.add(restartBTN);
 				contentPane.add(nameA);
@@ -272,13 +250,13 @@ public class Dots extends JFrame {
 			}
 		});
 		
-		restartBTN.addMouseListener(new MouseAdapter() { //scores are reset resets to start screen.
+		restartBTN.addMouseListener(new MouseAdapter() { //reset to starts screen when restart btn pressed.
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				gameBoard.clearScores();
+				gameBoard.clearScores(); // clear the players scores.
 				
-				
+				//add start screen components.
 				contentPane.add(gridSizeL);
 				contentPane.add(slider);
 				contentPane.add(boxesSizeText);
@@ -288,6 +266,8 @@ public class Dots extends JFrame {
 				contentPane.add(pBL);
 				contentPane.add(dnBL);
 				contentPane.add(strtBTN);
+				
+				//remove game components.
 				contentPane.remove(gameBoard);
 				contentPane.remove(restartBTN);
 				contentPane.remove(nameA);
@@ -303,34 +283,54 @@ public class Dots extends JFrame {
 				
 			}
 		});
-		gameBoard.addMouseListener(new MouseAdapter() { //handle board clicks
+		
+		//mouse motion listener for hover effect
+		gameBoard.addMouseMotionListener(new MouseMotionAdapter() { 
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				
+				gameBoard.savePoint(new Point(x,y));
+				
+				gameBoard.repaint();
+				
+			}
+		
+			
+		});
+		
+		//handle board clicks / line drawn
+		gameBoard.addMouseListener(new MouseAdapter() { 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
 				int y = e.getY();
 				
-				int result =gameBoard.boardClicked(x,y);
+				int result =gameBoard.boardClicked(x,y); //run bordClicked method. 
+														
 				
-				if (result == 0) { // line drawn switch players
+				if (result == 0) { // line drawn no box complete switch players
 					gameBoard.switchPlayers();
 					gameBoard.repaint();
 					
 					
-					if (gameBoard.whoTurn ==1) {
+					if (gameBoard.whoTurn ==1) { // switch the text letting know whos turn.
 						labelAboveBoard.setText(playerA.getText()+"'s Turn");
 					}else {
 						labelAboveBoard.setText(playerB.getText()+"'s Turn");
 					}
 					
 					
-				} else if (result == 1) { //box complete update the scores
+				} else if (result == 1) { //box complete update the scores. dont switch turn
 					
 					scoreA.setText(""+gameBoard.playerAScore);
 					scoreB.setText(""+gameBoard.playerBScore);
 					gameBoard.repaint();
 				}
 				
-				if (gameBoard.isBoardFull()) { // display the winner message.
+				if (gameBoard.isBoardFull()) { // check if board is full.
+											  // if so return who won and display the cooresponding message.
 					
 					String whoWonMsg = "";
 					if(gameBoard.playerAScore>gameBoard.playerBScore) {
@@ -343,16 +343,10 @@ public class Dots extends JFrame {
 					
 					labelAboveBoard.setText(whoWonMsg);
 					gameBoard.repaint();
-					
-					
-					
-					
-					
+
 					
 				}
-				
-				
-				
+
 				
 			}
 		});
