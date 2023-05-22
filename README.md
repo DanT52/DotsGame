@@ -1,11 +1,12 @@
 # DotsGame
-A Dots and Boxes game written in Java
+
+The Dots Game is a classic board game implemented in Java. The game is developed by Daniel Basarab and was last updated on May 21, 2023. The game allows two players to interactively draw lines on a board, aiming to complete a box. The player who completes a box gets a point.
+
 
 ![](https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmRkNWZjMDU0YjIxNjBmMDliOGQ3ZjdiYTg4MmY5MTRiYmVjNzU4NCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/whU9bGw6jHdLdONazG/giphy.gif)
 
-# Dots Game
 
-The Dots Game is a classic board game implemented in Java. The game is developed by Daniel Basarab and was last updated on May 21, 2023. The game allows two players to interactively draw lines on a board, aiming to complete a box. The player who completes a box gets a point.
+
 
 ## DotsGameBoard Class
 
