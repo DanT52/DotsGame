@@ -30,6 +30,13 @@ Each player takes turns drawing a line between two dots. The goal of the game is
 
 ## How to Run
 
+### Online
+[Try out the game online in a replit.](https://replit.com/@DanT52/DotsandBoxes?v=1) 
+Just press run and wait for it to load!
+
+### On your Own Machine
+First clone this repository.
+
 To play the game, compile and run the Dots class. Please ensure you have Java installed on your machine. A GUI will pop up for the game play. Enter the players' initials and select the grid size to start playing.
 
 ## Future Enhancements
