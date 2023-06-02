@@ -1,7 +1,3 @@
-//Daniel Basarab
-// 5/21/2023
-//CSE 223
-//PA5
 
 /*
  * GameBoard Class

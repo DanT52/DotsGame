@@ -1,7 +1,3 @@
-//Daniel Basarab
-// 5/21/2023
-//CSE 223
-//PA5
 
 /*Dots Game
  * This is a dots game that is played on a grid. completed boxes are marked with player initials
