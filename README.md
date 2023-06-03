@@ -6,6 +6,11 @@ The Dots Game is a classic board game implemented in Java. The game allows two p
 ![](https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmRkNWZjMDU0YjIxNjBmMDliOGQ3ZjdiYTg4MmY5MTRiYmVjNzU4NCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/whU9bGw6jHdLdONazG/giphy.gif)
 
 
+# NetDots
+In the NetDots Folder, is the extension of the origional dots game, NetDots is a version that 
+can be played across a network.
+
+for more info veiw: [NetDots](https://github.com/DanT52/DotsGame/tree/main/NetDots)
 
 
 ## DotsGameBoard Class
@@ -36,6 +41,8 @@ Just press run and wait for it to load!
 
 ### On your Own Machine
 First clone this repository.
+
+Run the Dots.jar file found within DotsGame/Dots
 
 To play the game, compile and run the Dots class. Please ensure you have Java installed on your machine. A GUI will pop up for the game play. Enter the players' initials and select the grid size to start playing.
 

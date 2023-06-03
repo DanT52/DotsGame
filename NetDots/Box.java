@@ -1,10 +1,3 @@
-//Daniel Basarab
-// 5/21/2023
-//CSE 223
-//PA5
-
-//Box class, represents one box. each side and if complete.
-
 
 public class Box { 
 	int complete = 0;

@@ -1,15 +1,3 @@
-//Daniel Basarab
-// 5/21/2023
-//CSE 223
-//PA5
-
-/*Dots Game
- * This is a dots game that is played on a grid. completed boxes are marked with player initials
- * the game is played with two players. each player has a turn and each turn a player can choose a box to mark.
- * 
- */
-
-
 
 import java.awt.EventQueue;
 import javax.swing.ButtonGroup;

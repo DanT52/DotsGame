@@ -1,14 +1,4 @@
-//Daniel Basarab
-// 5/21/2023
-//CSE 223
-//PA5
 
-/*
- * GameBoard Class
- * this is the board on which the game is played. 
- * game details are tracked here including the score and player initials
- * this class has methods to handle mouse clicks add new lines and see if the game is over.
- */
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
