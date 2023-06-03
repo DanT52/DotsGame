@@ -44,7 +44,7 @@ First clone this repository.
 
 Run the Dots.jar file found within DotsGame/Dots
 
-To play the game, compile and run the Dots class. Please ensure you have Java installed on your machine. A GUI will pop up for the game play. Enter the players' initials and select the grid size to start playing.
+Alternitively, compile and run the Dots class. Please ensure you have Java installed on your machine. A GUI will pop up for the game play. Enter the players' initials and select the grid size to start playing.
 
 ## Future Enhancements
 
