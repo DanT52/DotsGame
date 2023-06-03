@@ -1,3 +1,7 @@
+//Daniel Basarab
+// 5/21/2023
+//CSE 223
+//PA5
 
 /*
  * GameBoard Class
@@ -14,9 +18,14 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 public class DotsGameBoard extends JPanel {
-	public DotsGameBoard() {
+	
+	NetDot netDot;
+	public DotsGameBoard(NetDot netDot) {
+		this.netDot = netDot;
 	}
 	
+	
+
 	//store needed values for the game.
 	int dotSize = 6; //the size of dots does not change.
 	int d2 = dotSize/2; //this is half the dot size
@@ -248,7 +257,7 @@ public class DotsGameBoard extends JPanel {
         super.paintComponent(g); // select the color for the hover effect based on current player.
         Graphics2D g2d = (Graphics2D) g;
         
-        if (whoTurn ==1) {
+        if (netDot.isServer) {
         	g.setColor(new Color(141, 48, 255));
         }else {
         	g.setColor(new Color(83, 255, 43));
