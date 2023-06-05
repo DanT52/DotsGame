@@ -1,6 +1,7 @@
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Closeable;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -158,39 +159,22 @@ public class NetThread extends Thread {
     }
     
     public void cleanup() {
-        try {
-            if (pw != null) {
-                pw.close();
-            }
-        } catch (Exception e) {
-            System.out.println("Error closing PrintWriter");
-        }
-        
-        try {
-            if (sc != null) {
-                sc.close();
-            }
-        } catch (Exception e) {
-            System.out.println("Error closing Scanner");
-        }
-        
-        try {
-            if (socket != null) {
-                socket.close();
-            }
-        } catch (Exception e) {
-            System.out.println("Error closing Socket");
-        }
-        
-        try {
-            if (ss != null) {
-                ss.close();
-            }
-        } catch (Exception e) {
-            System.out.println("Error closing ServerSocket");
-        }
+        closeResource(pw, "PrintWriter");
+        closeResource(sc, "Scanner");
+        closeResource(socket, "Socket");
+        closeResource(ss, "ServerSocket");
         
         System.out.println("Resources cleaned up successfully");
+    }
+
+    private void closeResource(Closeable resource, String resourceName) {
+        try {
+            if (resource != null) {
+                resource.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error closing " + resourceName);
+        }
     }
 
 }
