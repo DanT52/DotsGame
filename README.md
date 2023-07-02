@@ -1,51 +1,32 @@
-# DotsGame
+# Artist Pad
 
-The Dots Game is a classic board game implemented in Java. The game allows two players to interactively draw lines on a board, aiming to complete a box. The player who completes a box gets a point.
+Artist Pad is an interactive digital drawing board. Developed using HTML, CSS, and JavaScript, Artist Pad allows users to color the grid of squares by hovering over them when the pen is turned on.
+
+![Artist Pad Preview](https://i.giphy.com/media/hHKHHeDfM5rxoS8L87/giphy.webp)
+
+## Technologies Used
+* HTML
+* CSS
+* JavaScript
+
+## Concepts Practiced
+* DOM Manipulation using JavaScript.
+* Event handling in JavaScript (click and hover events).
+* CSS styling including linear gradients and :hover pseudo-class.
+* Dynamically creating and removing HTML elements using JavaScript.
+
+## Features
+1. **Interactive Drawing Board:** The board is composed of a grid of squares. By turning on the pen (which is toggled by clicking anywhere on the screen that's not a button), you can change the color of the squares by hovering over them.
+
+2. **Color Options:** You can choose to color your art with Black, White, Cyan, Yellow, and Magenta. There's also a Rainbow option that colors each square with a random color from the rainbow.
+
+3. **Reset Board:** This feature allows you to clear the entire board to start a new masterpiece. 
+
+4. **Adjustable Board Size:** The size of the board can be adjusted by setting the desired number of squares (from 2 to 100).
+
+## Usage
+Check out the project on live on [GitHub pages](dant52.github.io/Etch-a-Sketch/) or
+just clone and open the `index.html` file in any web browser to start using Artist Pad.
 
 
-![](https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmRkNWZjMDU0YjIxNjBmMDliOGQ3ZjdiYTg4MmY5MTRiYmVjNzU4NCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/whU9bGw6jHdLdONazG/giphy.gif)
 
-
-# NetDots
-In the NetDots Folder, is the extension of the origional dots game, NetDots is a version that 
-can be played across a network.
-
-for more info veiw: [NetDots](https://github.com/DanT52/DotsGame/tree/main/NetDots)
-
-
-## DotsGameBoard Class
-
-This class represents the game board for the Dots Game. It contains the functionality for game play, tracking scores, switching turns, and detecting mouse clicks. The class includes the following methods:
-
-- `setPlayers(String a, String b)`: Sets the initials of the players.
-- `switchPlayers()`: Switches the active player.
-- `boardClicked(int x, int y)`: Determines if a line can be drawn at the mouse click point.
-- `clearScores()`: Resets the scores of both players.
-- `isBoardFull()`: Checks if the game board is full.
-- `addLine(char side, int boxX, int boxY)`: Adds a line on the specified side of the box.
-- `isBoxComplete(int x, int y)`: Checks if all sides of a box have a line drawn.
-- `whichSide(int mouseX, int mouseY)`: Determines which side of a box the mouse is closest to.
-- `savePoint(Point x)`: Saves the current mouse position.
-- `saveBoardSize(int gridSize)`: Initializes the board size.
-- `paintComponent(Graphics g)`: Responsible for rendering the game board.
-
-## Game Play
-
-Each player takes turns drawing a line between two dots. The goal of the game is to complete a box. Completing a box scores a point and allows the player to take another turn. The game continues until all boxes are filled. The player with the most points (i.e., boxes) wins the game.
-
-## How to Run
-
-### Online
-[Try out the game online in a replit.](https://replit.com/@DanT52/DotsandBoxes?v=1) 
-Just press run and wait for it to load!
-
-### On your Own Machine
-First clone this repository.
-
-Run the Dots.jar file found within DotsGame/Dots
-
-Alternitively, compile and run the Dots class. Please ensure you have Java installed on your machine. A GUI will pop up for the game play. Enter the players' initials and select the grid size to start playing.
-
-## Future Enhancements
-
-Future enhancements to this game could include options for playing against a computer player, saving and loading game state, and adjusting the difficulty level.
